@@ -1,6 +1,6 @@
 # Pardus Sistem Temizleyici 🧹
 
-2026 Teknofest Pardus Hata Yakalama ve Öneri Yarışması Geliştirme Kategorisi için **İnoTürk takımı** tarafından geliştirilmiştir.
+2026 Teknofest Pardus Hata Yakalama ve Öneri Yarışması Geliştirme Kategorisi için **İnoTürk** takımı tarafından geliştirilmiştir.
 
 ## Hakkında
 Pardus Sistem Temizleyici, modern, güvenli ve kullanıcı dostu bir Linux sistem temizleme aracıdır. Geleneksel temizleyicilerin aksine, körü körüne tüm sistemi silmek yerine **kural tabanlı, akıllı ve şeffaf** bir temizlik motoru kullanır. Sisteminizin ihtiyacı olmayan kalıntıları silerken, sistemin çalışmasını bozabilecek hiçbir dosyaya dokunmaz.
