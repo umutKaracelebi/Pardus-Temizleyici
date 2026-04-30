@@ -33,4 +33,4 @@ python3 main.py
 Pardus Sistem Temizleyici, komut enjeksiyonlarına (command injection) karşı güvenlidir. Kullanıcı dosyaları doğrudan Python'un `os` ve `shutil` kütüphaneleriyle silinir. Sistem görevleri (apt-get, journalctl) ise parçalanmış diziler (array) olarak izole bir şekilde arka planda yönetilir.
 
 ## Lisans
-Bu proje açık kaynak kodlu olup GPL-3.0 lisansı ile korunmaktadır. Özgürce kullanılabilir, geliştirilebilir ve dağıtılabilir.
+Bu proje açık kaynak kodlu olup MIT lisansı ile korunmaktadır. Özgürce kullanılabilir, geliştirilebilir ve dağıtılabilir.
