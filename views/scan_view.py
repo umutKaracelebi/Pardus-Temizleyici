@@ -43,10 +43,10 @@ class ScanView(Gtk.Box):
         self._scan_progress = CircularProgress(size=120, line_width=8)
         self._scan_progress.set_halign(Gtk.Align.CENTER)
         self._scan_progress.set_text("0%")
-        self._scan_progress.set_sub_text("taranıyor...")
+        self._scan_progress.set_sub_text(_("taranıyor..."))
         self._scan_progress.start_pulse()
 
-        self._scan_status = Gtk.Label(label="Sistem taranıyor...")
+        self._scan_status = Gtk.Label(label=_("Sistem taranıyor..."))
         self._scan_status.add_css_class("scan-status")
 
         # İlerleme çubuğu
@@ -99,21 +99,23 @@ class ScanView(Gtk.Box):
         self._button_box.set_margin_bottom(20)
         self._button_box.set_visible(False)
 
-        back_btn = Gtk.Button(label="← Geri")
+        back_btn = Gtk.Button(label=_("← Geri"))
         back_btn.add_css_class("back-button")
         back_btn.set_size_request(120, 42)
         if on_back_clicked:
             back_btn.connect("clicked", lambda b: on_back_clicked())
 
-        select_all_btn = Gtk.Button(label="Tümünü Seç")
+        select_all_btn = Gtk.Button(label=_("Tümünü Seç"))
         select_all_btn.add_css_class("select-all-button")
         select_all_btn.set_size_request(120, 42)
         select_all_btn.connect("clicked", self._on_select_all)
 
         self._clean_btn = Gtk.Button()
         clean_content = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        clean_content.set_halign(Gtk.Align.CENTER)
+        clean_content.set_valign(Gtk.Align.CENTER)
         clean_icon = Gtk.Image.new_from_icon_name("edit-clear-all-symbolic")
-        clean_label = Gtk.Label(label="Temizle")
+        clean_label = Gtk.Label(label=_("Temizle"))
         clean_label.add_css_class("clean-btn-label")
         clean_content.append(clean_icon)
         clean_content.append(clean_label)
@@ -137,7 +139,7 @@ class ScanView(Gtk.Box):
 
         self._scan_progress.set_progress(percent)
         self._scan_progress.set_text(f"%{int(percent * 100)}")
-        self._scan_status.set_text(f"{name} taranıyor...")
+        self._scan_status.set_text(f"{name} {_('taranıyor...')}")
         self._progress_bar.set_fraction(percent)
 
     def show_results(self, results):
@@ -155,10 +157,10 @@ class ScanView(Gtk.Box):
 
         self._total_label.set_markup(
             f'<span size="xx-large" weight="bold">{format_size(total_size)}</span>'
-            f'  <span size="large" color="#888">temizlenebilir</span>'
+            f'  <span size="large" color="#888">{_("temizlenebilir")}</span>'
         )
         self._count_label.set_text(
-            f"{total_categories} kategoride alan bulundu"
+            f"{total_categories} {_('kategoride alan bulundu')}"
         )
 
         # Temizle
@@ -183,7 +185,7 @@ class ScanView(Gtk.Box):
         if not self._scan_rows:
             empty_label = Gtk.Label()
             empty_label.set_markup(
-                '<span size="large">✨ Sisteminiz zaten temiz!</span>'
+                f'<span size="large">✨ {_("Sisteminiz zaten temiz!")}</span>'
             )
             empty_label.add_css_class("empty-results")
             self._results_box.append(empty_label)
@@ -201,9 +203,9 @@ class ScanView(Gtk.Box):
         self._button_box.set_visible(False)
         self._scan_progress.set_progress(0, animate=False)
         self._scan_progress.set_text("0%")
-        self._scan_progress.set_sub_text("taranıyor...")
+        self._scan_progress.set_sub_text(_("taranıyor..."))
         self._scan_progress.start_pulse()
-        self._scan_status.set_text("Sistem taranıyor...")
+        self._scan_status.set_text(_("Sistem taranıyor..."))
         self._progress_bar.set_fraction(0)
 
         child = self._results_box.get_first_child()

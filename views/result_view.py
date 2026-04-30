@@ -60,7 +60,7 @@ class ResultView(Gtk.Box):
         # Başlık
         title = Gtk.Label()
         title.set_markup(
-            '<span size="x-large" weight="bold">Temizlik Geçmişi</span>'
+            f'<span size="x-large" weight="bold">{_("Temizlik Geçmişi")}</span>'
         )
         title.set_halign(Gtk.Align.START)
         title.add_css_class("result-title")
@@ -78,17 +78,13 @@ class ResultView(Gtk.Box):
 
             empty_title = Gtk.Label()
             empty_title.set_markup(
-                '<span size="large" weight="bold" color="#888">'
-                'Henüz temizlik yapılmadı</span>'
+                f'<span size="large" weight="bold" color="#888">{_("Henüz temizlik yapılmamış.")}</span>'
             )
             empty_box.append(empty_title)
 
             empty_desc = Gtk.Label()
-            empty_desc.set_markup(
-                '<span color="#666">'
-                'Ana sayfadan "Detaylı Analiz Et" butonuyla\n'
-                'ilk taramayı başlatabilirsiniz.</span>'
-            )
+            text = _("Ana sayfadan \"Detaylı Analiz Et\" butonuyla\nsisteminizi tarayabilir ve temizleyebilirsiniz.")
+            empty_desc.set_markup(f'<span color="#666">{text}</span>')
             empty_desc.set_justify(Gtk.Justification.CENTER)
             empty_box.append(empty_desc)
 
@@ -125,7 +121,7 @@ class ResultView(Gtk.Box):
         title = Gtk.Label()
         title.set_markup(
             '<span size="x-large" weight="bold">' +
-            ('Temizlik Tamamlandı!' if total_errors == 0 else 'Temizlik Kısmen Tamamlandı') +
+            (_('Temizlik Tamamlandı!') if total_errors == 0 else _('Temizlik Kısmen Tamamlandı')) +
             '</span>'
         )
         title.set_halign(Gtk.Align.CENTER)
@@ -189,7 +185,7 @@ class ResultView(Gtk.Box):
         home_btn = Gtk.Button()
         hc = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         hi = Gtk.Image.new_from_icon_name("go-home-symbolic")
-        hl = Gtk.Label(label="Ana Sayfaya Dön")
+        hl = Gtk.Label(label=_("Ana Sayfaya Dön"))
         hc.append(hi)
         hc.append(hl)
         home_btn.set_child(hc)
@@ -209,21 +205,21 @@ class ResultView(Gtk.Box):
         cards.set_margin_top(8)
 
         cards.append(self._make_stat_card(
-            "TOPLAM KAZANILAN",
+            _("TOPLAM KAZANILAN"),
             format_size(stats["total_freed"]),
-            "tüm zamanlar",
+            _("tüm zamanlar"),
             "#10B981"
         ))
 
         cards.append(self._make_stat_card(
-            "TEMİZLİK SAYISI",
+            _("TEMİZLİK SAYISI"),
             str(stats["total_sessions"]),
-            "oturum",
+            _("oturum"),
             "#3B82F6"
         ))
 
         cards.append(self._make_stat_card(
-            "SON TEMİZLİK",
+            _("SON TEMİZLİK"),
             stats["last_clean"],
             "",
             "#F59E0B"
@@ -238,7 +234,7 @@ class ResultView(Gtk.Box):
 
         cat_title = Gtk.Label()
         cat_title.set_markup(
-            '<span size="large" weight="bold">Kategori Bazında Toplam</span>'
+            f'<span size="large" weight="bold">{_("Kategori Bazında Toplam")}</span>'
         )
         cat_title.set_halign(Gtk.Align.START)
         cat_title.set_margin_top(16)
@@ -288,7 +284,7 @@ class ResultView(Gtk.Box):
 
         session_title = Gtk.Label()
         session_title.set_markup(
-            '<span size="large" weight="bold">Son Temizlikler</span>'
+            f'<span size="large" weight="bold">{_("Son Temizlikler")}</span>'
         )
         session_title.set_halign(Gtk.Align.START)
         session_title.set_margin_top(16)
@@ -310,7 +306,7 @@ class ResultView(Gtk.Box):
             size_lbl.add_css_class("history-row-size")
 
             cats = len(record.get("categories", {}))
-            cat_lbl = Gtk.Label(label=f"{cats} kategori")
+            cat_lbl = Gtk.Label(label=f"{cats} {_('kategori')}")
             cat_lbl.add_css_class("history-row-cat")
 
             row.append(date_lbl)
@@ -353,20 +349,20 @@ class ResultView(Gtk.Box):
                 label.set_markup(
                     f'<span size="30000" weight="ultrabold" color="#10B981">'
                     f'{format_size(self._anim_target)}</span>'
-                    f'\n<span size="12000" color="#888">alan kazanıldı</span>'
+                    f'\n<span size="12000" color="#888">{_("alan kazanıldı")}</span>'
                 )
                 return False
             self._anim_current += diff * 0.08
             label.set_markup(
                 f'<span size="30000" weight="ultrabold" color="#10B981">'
                 f'{format_size(int(self._anim_current))}</span>'
-                f'\n<span size="12000" color="#888">alan kazanıldı</span>'
+                f'\n<span size="12000" color="#888">{_("alan kazanıldı")}</span>'
             )
             return True
 
         label.set_markup(
             '<span size="30000" weight="ultrabold" color="#10B981">0 B</span>'
-            '\n<span size="12000" color="#888">alan kazanıldı</span>'
+            f'\n<span size="12000" color="#888">{_("alan kazanıldı")}</span>'
         )
         GLib.timeout_add(20, step)
 

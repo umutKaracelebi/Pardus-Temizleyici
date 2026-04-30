@@ -28,7 +28,7 @@ class HomeView(Gtk.Box):
     def __init__(self, on_scan_clicked=None):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         self._on_scan_clicked = on_scan_clicked
-        self._view_mode = "list"  # "list" veya "card"
+        self._view_mode = "card"  # "list" veya "card"
         self.add_css_class("home-view")
 
         scroll = Gtk.ScrolledWindow()
@@ -64,14 +64,14 @@ class HomeView(Gtk.Box):
 
         title = Gtk.Label()
         title.set_markup(
-            '<span size="large" weight="bold">Temizlenebilecek Alanlar</span>'
+            f'<span size="large" weight="bold">{_("Temizlenebilecek Alanlar")}</span>'
         )
         title.set_halign(Gtk.Align.START)
         title.set_hexpand(True)
         title.add_css_class("section-title")
         header_row.append(title)
 
-        self._est_status = Gtk.Label(label="hesaplanıyor...")
+        self._est_status = Gtk.Label(label=_("hesaplanıyor..."))
         self._est_status.add_css_class("est-status")
         self._est_status.set_margin_end(12)
         header_row.append(self._est_status)
@@ -83,18 +83,18 @@ class HomeView(Gtk.Box):
         self._list_btn = Gtk.Button()
         self._list_btn.set_icon_name("view-list-symbolic")
         self._list_btn.add_css_class("view-btn")
-        self._list_btn.add_css_class("view-btn-active")
-        self._list_btn.set_tooltip_text("Liste görünümü")
+        self._list_btn.set_tooltip_text(_("Liste görünümü"))
         self._list_btn.connect("clicked", self._on_view_toggle, "list")
 
         self._card_btn = Gtk.Button()
         self._card_btn.set_icon_name("view-grid-symbolic")
         self._card_btn.add_css_class("view-btn")
-        self._card_btn.set_tooltip_text("Kart görünümü")
+        self._card_btn.add_css_class("view-btn-active")
+        self._card_btn.set_tooltip_text(_("Kart görünümü"))
         self._card_btn.connect("clicked", self._on_view_toggle, "card")
 
-        view_box.append(self._list_btn)
         view_box.append(self._card_btn)
+        view_box.append(self._list_btn)
         header_row.append(view_box)
 
         self._content.append(header_row)
@@ -114,7 +114,7 @@ class HomeView(Gtk.Box):
 
         self._total_est = Gtk.Label()
         self._total_est.set_markup(
-            '<span size="large" weight="bold" color="#888">Tahmini: ...</span>'
+            f'<span size="large" weight="bold" color="#888">{_("Tahmini:")} ...</span>'
         )
         self._total_est.set_valign(Gtk.Align.CENTER)
         bottom.append(self._total_est)
@@ -123,7 +123,7 @@ class HomeView(Gtk.Box):
         ac = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         ai = Gtk.Image.new_from_icon_name("system-search-symbolic")
         ai.set_pixel_size(20)
-        al = Gtk.Label(label="Detaylı Analiz Et")
+        al = Gtk.Label(label=_("Detaylı Analiz Et"))
         al.add_css_class("action-btn-label")
         ac.append(ai)
         ac.append(al)
@@ -161,7 +161,7 @@ class HomeView(Gtk.Box):
         )
         pct_label.add_css_class("disk-pct")
 
-        pct_sub = Gtk.Label(label="disk dolu")
+        pct_sub = Gtk.Label(label=_("disk dolu"))
         pct_sub.add_css_class("disk-pct-sub")
 
         pct_box.append(pct_label)
@@ -196,7 +196,7 @@ class HomeView(Gtk.Box):
         used_lbl = Gtk.Label()
         used_lbl.set_markup(
             f'<span weight="bold">{format_size(disk_info["used"])}</span>'
-            f' <span color="#888">kullanılan</span>'
+            f' <span color="#888">{_("kullanılan")}</span>'
         )
         used_lbl.set_halign(Gtk.Align.START)
         used_lbl.set_hexpand(True)
@@ -205,7 +205,7 @@ class HomeView(Gtk.Box):
         free_lbl = Gtk.Label()
         free_lbl.set_markup(
             f'<span color="#10B981" weight="bold">{format_size(disk_info["free"])}</span>'
-            f' <span color="#888">boş</span>'
+            f' <span color="#888">{_("boş")}</span>'
         )
         free_lbl.set_halign(Gtk.Align.END)
         free_lbl.add_css_class("disk-detail")
@@ -216,7 +216,7 @@ class HomeView(Gtk.Box):
 
         total_lbl = Gtk.Label()
         total_lbl.set_markup(
-            f'<span color="#666">Toplam: {format_size(disk_info["total"])}'
+            f'<span color="#666">{_("Toplam:")} {format_size(disk_info["total"])}'
             f' · {disk_info.get("fstype", "ext4")}</span>'
         )
         total_lbl.set_halign(Gtk.Align.START)
@@ -352,8 +352,9 @@ class HomeView(Gtk.Box):
             if cid in self._cat_size_labels:
                 lbl = self._cat_size_labels[cid]
                 lbl.set_text(text)
-                if text not in ("—", "hesaplanıyor..."):
-                    if "temiz" in text:
+                lbl.set_text(text)
+                if text not in ("—", _("hesaplanıyor...")):
+                    if _("temiz") in text:
                         lbl.add_css_class("cat-size-clean")
                     else:
                         lbl.add_css_class("cat-size-found")
@@ -369,11 +370,11 @@ class HomeView(Gtk.Box):
             lbl.remove_css_class("cat-size-found")
             lbl.remove_css_class("cat-size-clean")
 
-        self._est_status.set_text("yenileniyor...")
+        self._est_status.set_text(_("yenileniyor..."))
         self._est_status.remove_css_class("est-done")
 
         self._total_est.set_markup(
-            '<span size="large" weight="bold" color="#888">Tahmini: ...</span>'
+            f'<span size="large" weight="bold" color="#888">{_("Tahmini:")} ...</span>'
         )
 
         self._start_estimation()
@@ -407,20 +408,20 @@ class HomeView(Gtk.Box):
                 lbl.set_text(format_size(size))
                 lbl.add_css_class("cat-size-found")
             else:
-                lbl.set_text("temiz ✓")
+                lbl.set_text(_("temiz") + " ✓")
                 lbl.add_css_class("cat-size-clean")
 
     def _update_total(self, total):
         if total > 0:
             self._total_est.set_markup(
                 f'<span size="large" weight="bold">'
-                f'Tahmini: <span color="#3B82F6">{format_size(total)}</span>'
-                f' temizlenebilir</span>'
+                f'{_("Tahmini:")} <span color="#3B82F6">{format_size(total)}</span>'
+                f' {_("temizlenebilir")}</span>'
             )
         else:
             self._total_est.set_markup(
-                '<span size="large" weight="bold" color="#10B981">'
-                'Sisteminiz temiz görünüyor ✨</span>'
+                f'<span size="large" weight="bold" color="#10B981">'
+                f'{_("Sisteminiz temiz görünüyor")} ✨</span>'
             )
-        self._est_status.set_text("✓ güncel")
+        self._est_status.set_text("✓ " + _("güncel"))
         self._est_status.add_css_class("est-done")

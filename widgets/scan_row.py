@@ -100,7 +100,7 @@ class ScanRow(Gtk.Box):
 
     def _build_flat_file_list(self, scan_result):
         """Normal kategoriler için düz dosya listesi."""
-        count_lbl = Gtk.Label(label=f"{len(scan_result.files)} dosya")
+        count_lbl = Gtk.Label(label=f"{len(scan_result.files)} {_('dosya')}")
         count_lbl.set_halign(Gtk.Align.START)
         count_lbl.add_css_class("file-count-label")
         count_lbl.set_margin_bottom(4)
@@ -108,7 +108,8 @@ class ScanRow(Gtk.Box):
 
         file_scroll = Gtk.ScrolledWindow()
         file_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        file_scroll.set_max_content_height(300)
+        file_scroll.set_min_content_height(min(len(scan_result.files) * 36, 250))
+        file_scroll.set_max_content_height(250)
         file_scroll.set_propagate_natural_height(True)
 
         detail_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
@@ -145,7 +146,7 @@ class ScanRow(Gtk.Box):
         """Yinelenen dosyalar için grup bazlı arayüz."""
         groups = scan_result.duplicate_groups
 
-        count_lbl = Gtk.Label(label=f"{len(groups)} grup · {len(scan_result.files)} kopya")
+        count_lbl = Gtk.Label(label=f"{len(groups)} {_('grup')} · {len(scan_result.files)} {_('kopya')}")
         count_lbl.set_halign(Gtk.Align.START)
         count_lbl.add_css_class("file-count-label")
         count_lbl.set_margin_bottom(6)
@@ -153,7 +154,9 @@ class ScanRow(Gtk.Box):
 
         file_scroll = Gtk.ScrolledWindow()
         file_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        file_scroll.set_max_content_height(400)
+        calc_h = (len(groups) * 35) + (len(scan_result.files) * 36)
+        file_scroll.set_min_content_height(min(calc_h, 300))
+        file_scroll.set_max_content_height(300)
         file_scroll.set_propagate_natural_height(True)
 
         groups_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
@@ -191,51 +194,49 @@ class ScanRow(Gtk.Box):
                 p_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
                 p_row.set_margin_start(22)
 
-                if j == 0:
-                    # İlk kopya = KORUNACAK (silinmez, flat listede yok)
-                    keep_icon = Gtk.Label()
-                    keep_icon.set_markup(
-                        '<span color="#10B981" weight="bold">✓</span>'
-                    )
-                    keep_icon.set_size_request(22, -1)
-                    p_row.append(keep_icon)
+                # Checkbox durumu scan_result.file_selected üzerinden alınır
+                # Önceden ilk eleman (j==0) unchecked olarak işaretlendi
+                is_selected = self._scan_result.file_selected[file_idx]
 
-                    # Klasör yolu
-                    folder = os.path.dirname(path)
-                    p_label = Gtk.Label(label=folder)
-                    p_label.set_halign(Gtk.Align.START)
-                    p_label.set_hexpand(True)
-                    p_label.set_ellipsize(3)
-                    p_label.add_css_class("dup-path-keep")
-                    p_label.set_tooltip_text(path)
-                    p_row.append(p_label)
+                file_check = Gtk.CheckButton()
+                file_check.set_active(is_selected)
+                self._file_checks.append(file_check)
+                p_row.append(file_check)
 
-                    tag = Gtk.Label(label="KORUNACAK")
-                    tag.add_css_class("dup-tag-keep")
-                    p_row.append(tag)
-                else:
-                    # Diğer kopyalar = SİLİNECEK (checkbox ile seçilebilir)
-                    file_check = Gtk.CheckButton()
-                    file_check.set_active(True)
-                    file_check.connect("toggled", self._on_file_toggled, file_idx)
-                    self._file_checks.append(file_check)
-                    p_row.append(file_check)
+                # Tam dosya yolunu göster
+                p_label = Gtk.Label(label=path)
+                p_label.set_halign(Gtk.Align.START)
+                p_label.set_hexpand(True)
+                p_label.set_ellipsize(3)
+                p_label.set_tooltip_text(path)
+                
+                tag = Gtk.Label()
+                p_row.append(p_label)
+                p_row.append(tag)
 
-                    folder = os.path.dirname(path)
-                    p_label = Gtk.Label(label=folder)
-                    p_label.set_halign(Gtk.Align.START)
-                    p_label.set_hexpand(True)
-                    p_label.set_ellipsize(3)
-                    p_label.add_css_class("dup-path-delete")
-                    p_label.set_tooltip_text(path)
-                    p_row.append(p_label)
+                # Helper fonksiyon - toggle durumuna göre stilleri günceller
+                def update_row_style(check, lbl=p_label, t=tag):
+                    if check.get_active():
+                        lbl.remove_css_class("dup-path-keep")
+                        lbl.add_css_class("dup-path-delete")
+                        t.set_text("SİLİNECEK")
+                        t.remove_css_class("dup-tag-keep")
+                        t.add_css_class("dup-tag-delete")
+                    else:
+                        lbl.remove_css_class("dup-path-delete")
+                        lbl.add_css_class("dup-path-keep")
+                        t.set_text("KORUNACAK")
+                        t.remove_css_class("dup-tag-delete")
+                        t.add_css_class("dup-tag-keep")
 
-                    tag = Gtk.Label(label="SİLİNECEK")
-                    tag.add_css_class("dup-tag-delete")
-                    p_row.append(tag)
+                # İlk stili uygula
+                update_row_style(file_check)
 
-                    file_idx += 1
+                # Toggled event bağlantısı
+                file_check.connect("toggled", lambda c, l=p_label, t=tag, idx=file_idx: 
+                                   (update_row_style(c, l, t), self._on_file_toggled(c, idx)))
 
+                file_idx += 1
                 g_box.append(p_row)
 
             groups_box.append(g_box)

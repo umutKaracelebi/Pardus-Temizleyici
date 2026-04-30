@@ -27,6 +27,11 @@ class Application(Adw.Application):
     def do_startup(self):
         Adw.Application.do_startup(self)
 
+        # Logoyu GTK'nın bulabilmesi için ana dizini ikon arama yoluna ekle
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
+        icon_theme.add_search_path(app_dir)
+
         # Koyu tema varsayılan
         style_manager = Adw.StyleManager.get_default()
         style_manager.set_color_scheme(Adw.ColorScheme.PREFER_DARK)

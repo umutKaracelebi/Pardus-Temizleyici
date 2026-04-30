@@ -36,6 +36,8 @@ class ScanResult:
     @property
     def selected_size(self):
         """Seçili dosyaların toplam boyutu."""
+        if not self.files:
+            return self.total_size if self.selected else 0
         return sum(
             size for (_, size), sel in zip(self.files, self.file_selected) if sel
         )
@@ -106,7 +108,7 @@ class Scanner:
         """APT önbellek dosyalarını tarar — apt-get clean'in yapacağı iş."""
         rule = {"path": "/var/cache/apt/archives", "pattern": "*.deb", "match_type": "file"}
         files, total = self._engine.scan_rule(rule)
-        return ScanResult("apt_cache", files, total, f"{len(files)} adet .deb dosyası")
+        return ScanResult("apt_cache", files, total, f"{len(files)} {_('adet .deb dosyası')}")
 
     def _scan_apt_autoremove(self):
         """Artık gerekmeyen paketleri tarar — apt autoremove."""
@@ -147,7 +149,7 @@ class Scanner:
         except Exception:
             pass
 
-        return ScanResult("apt_autoremove", packages, total_size, f"{len(packages)} gereksiz paket")
+        return ScanResult("apt_autoremove", packages, total_size, f"{len(packages)} {_('gereksiz paket')}")
 
     def _scan_old_kernels(self):
         """Eski çekirdek dosyalarını tarar."""
@@ -185,7 +187,7 @@ class Scanner:
         except Exception:
             pass
 
-        return ScanResult("old_kernels", old_kernels, total_size, f"{len(old_kernels)} eski çekirdek")
+        return ScanResult("old_kernels", old_kernels, total_size, f"{len(old_kernels)} {_('eski çekirdek')}")
 
     def _scan_user_cache(self):
         """Kullanıcı önbelleğini kural motoruyla tarar."""
@@ -200,13 +202,13 @@ class Scanner:
             files.extend(rule_files)
             total_size += rule_total
 
-        return ScanResult("user_cache", files, total_size, f"{len(files)} önbellek öğesi")
+        return ScanResult("user_cache", files, total_size, f"{len(files)} {_('önbellek öğesi')}")
 
     def _scan_thumbnails(self):
         """Küçük resim dosyalarını tarar."""
         rule = {"path": _expand_path("${HOME}/.cache/thumbnails"), "match_type": "both"}
         files, total = self._engine.scan_rule(rule)
-        return ScanResult("thumbnails", files, total, f"{len(files)} küçük resim")
+        return ScanResult("thumbnails", files, total, f"{len(files)} {_('küçük resim')}")
 
     def _scan_journal_logs(self):
         """Sistem journal loglarını tarar."""
@@ -228,7 +230,7 @@ class Scanner:
                     multiplier = {"K": 1024, "M": 1024**2, "G": 1024**3, "T": 1024**4}
                     total_size = int(size_val * multiplier.get(unit, 1))
                     total_size = int(total_size * 0.6)
-                    details = f"Tahmini eski log: {output}"
+                    details = f"{_('Tahmini eski log:')} {output}"
         except Exception:
             pass
 
@@ -252,7 +254,7 @@ class Scanner:
                     files.append((trash_dir, dir_size))
                     total_size += dir_size
 
-        return ScanResult("trash", files, total_size, f"{len(files)} çöp dizini")
+        return ScanResult("trash", files, total_size, f"{len(files)} {_('çöp dizini/dosyası')}")
 
     def _scan_temp_files(self):
         """/tmp altındaki eski geçici dosyaları tarar."""
@@ -279,7 +281,7 @@ class Scanner:
         except (OSError, PermissionError):
             pass
 
-        return ScanResult("temp_files", files, total_size, f"{len(files)} eski geçici dosya")
+        return ScanResult("temp_files", files, total_size, f"{len(files)} {_('eski geçici dosya')}")
 
     def _scan_dev_artifacts(self):
         """Geliştirici artıklarını kural motoruyla tarar."""
@@ -305,17 +307,31 @@ class Scanner:
                 files.append((path, size))
                 total_size += size
 
-        return ScanResult("dev_artifacts", files, total_size, f"{len(files)} geliştirici artığı")
+        return ScanResult("dev_artifacts", files, total_size, f"{len(files)} {_('geliştirici artığı')}")
 
     def _scan_duplicates(self):
         """Yinelenen dosyaları tarar — boyut + hash, grup bilgisiyle."""
         import hashlib
         home = get_home_dir()
-        min_size = 100 * 1024  # 100KB altı dosyaları atla
-        max_depth = 4
+        min_size = 10 * 1024  # 10KB altı dosyaları atla (eskiden 100KB idi, küçük .odt vb. için düşürdük)
+        max_depth = 6
 
         # Adım 1: Boyuta göre grupla
         size_map = {}  # size -> [path, ...]
+
+        # Sadece kullanıcı dosyalarına odaklan (sistem/uygulama dosyalarını atla)
+        allowed_exts = {
+            # Belgeler
+            '.pdf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.txt', '.rtf', '.csv',
+            # Resimler
+            '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp', '.tiff',
+            # Videolar
+            '.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm',
+            # Sesler
+            '.mp3', '.wav', '.flac', '.ogg', '.m4a', '.aac',
+            # Arşivler / İmajlar
+            '.zip', '.rar', '.7z', '.tar', '.gz', '.iso'
+        }
 
         def walk_dir(path, depth=0):
             if depth > max_depth or self.is_cancelled():
@@ -328,18 +344,34 @@ class Scanner:
                         if entry.is_file():
                             st = entry.stat()
                             if st.st_size >= min_size:
-                                size_map.setdefault(st.st_size, []).append(entry.path)
+                                ext = os.path.splitext(entry.name)[1].lower()
+                                if ext in allowed_exts:
+                                    size_map.setdefault(st.st_size, []).append(entry.path)
                         elif entry.is_dir():
-                            skip = {'.cache', '.local', '.config', 'node_modules',
-                                    '__pycache__', '.git', '.venv', 'venv'}
-                            if entry.name not in skip:
+                            # Sadece izin verilen standart klasörler içinde derine in
+                            # .cache vb. gizli klasörler zaten taranmayacak
+                            if not entry.name.startswith('.'):
                                 walk_dir(entry.path, depth + 1)
                     except (OSError, PermissionError):
                         continue
             except (OSError, PermissionError):
                 pass
 
-        walk_dir(home)
+        # Tüm ev dizinini rastgele taramak yerine sadece güvenli kullanıcı klasörlerini tara
+        from gi.repository import GLib
+        xdg_dirs = [
+            GLib.UserDirectory.DIRECTORY_DESKTOP,
+            GLib.UserDirectory.DIRECTORY_DOCUMENTS,
+            GLib.UserDirectory.DIRECTORY_DOWNLOAD,
+            GLib.UserDirectory.DIRECTORY_MUSIC,
+            GLib.UserDirectory.DIRECTORY_PICTURES,
+            GLib.UserDirectory.DIRECTORY_VIDEOS,
+        ]
+        
+        for dir_type in xdg_dirs:
+            path = GLib.get_user_special_dir(dir_type)
+            if path and os.path.exists(path) and path.startswith(home):
+                walk_dir(path)
 
         # Adım 2: Aynı boyuttaki dosyaları hash'le — GRUPLAR oluştur
         # groups: [ { "name": "dosya.pdf", "size": 1234, "paths": [path1, path2, ...] }, ... ]
@@ -372,20 +404,29 @@ class Scanner:
                 groups.append({
                     "name": name,
                     "size": fsize,
-                    "paths": group_paths,  # ilk eleman = orijinal (varsayılan korunan)
+                    "paths": group_paths,  # Tümü
                 })
 
-                # Flat listeye ekle: ilk hariç hepsi silinecek olarak
-                for p in group_paths[1:]:
+                # Flat listeye ekle: HEPSİNİ ekle
+                for p in group_paths:
                     duplicates.append((p, fsize))
+                    # total_size hesabına hepsi dahil olmasın diye aşağıda hallediyoruz
+                    # aslında hepsi potansiyel silinebilir, o yüzden hepsini ekleyelim
                     total_size += fsize
 
         result = ScanResult(
             "duplicates", duplicates, total_size,
-            f"{len(duplicates)} yinelenen dosya ({len(groups)} grup)"
+            f"{len(groups)} {_('yinelenen dosya grubu')}"
         )
         # Grup bilgisini ekstra olarak sakla
         result.duplicate_groups = groups
+
+        # İlk dosyaları varsayılan olarak korunacak (seçimsiz) yap
+        file_idx = 0
+        for g in groups:
+            result.file_selected[file_idx] = False  # İlkini koru
+            file_idx += len(g["paths"])
+
         return result
 
     def estimate_category_size(self, cat_id, engine=None):

@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: pardus-temizleyici
+"
+"Report-Msgid-Bugs-To: 
+"
+"POT-Creation-Date: 2026-05-01 00:00+0300
+"
+"PO-Revision-Date: 2026-05-01 00:00+0300
+"
+"Last-Translator: InoTurk
+"
+"Language-Team: English
+"
+"Language: en
+"
+"MIME-Version: 1.0
+"
+"Content-Type: text/plain; charset=UTF-8
+"
+"Content-Transfer-Encoding: 8bit
+"
+
+msgid "APT Önbelleği"
+msgstr "APT Cache"
+
+msgid "İndirilen .deb paket dosyaları"
+msgstr "Downloaded .deb package files"
+
+msgid "Gereksiz Paketler"
+msgstr "Unnecessary Packages"
+
+msgid "Artık gerekmeyen bağımlılıklar"
+msgstr "Dependencies no longer needed"
+
+msgid "Eski Çekirdekler"
+msgstr "Old Kernels"
+
+msgid "Kullanılmayan eski kernel dosyaları"
+msgstr "Unused old kernel files"
+
+msgid "Kullanıcı Önbelleği"
+msgstr "User Cache"
+
+msgid "Uygulama önbellek dosyaları (~/.cache)"
+msgstr "Application cache files (~/.cache)"
+
+msgid "Küçük Resimler"
+msgstr "Thumbnails"
+
+msgid "Dosya yöneticisi küçük resimleri"
+msgstr "File manager thumbnails"
+
+msgid "Sistem Günlükleri"
+msgstr "System Logs"
+
+msgid "Sistem hata ve olay kayıtları"
+msgstr "System error and event logs"
+
+msgid "Çöp Kutusu"
+msgstr "Trash"
+
+msgid "Silinmiş dosyalar"
+msgstr "Deleted files"
+
+msgid "Geçici Dosyalar"
+msgstr "Temporary Files"
+
+msgid "/tmp altındaki kullanıcınıza ait dosyalar"
+msgstr "Your temporary files under /tmp"
+
+msgid "Geliştirici Artıkları"
+msgstr "Developer Artifacts"
+
+msgid "Projelerdeki gereksiz derleme dosyaları (node_modules, __pycache__, vb.)"
+msgstr "Unnecessary build files in projects (node_modules, __pycache__, etc.)"
+
+msgid "Yinelenen Dosyalar"
+msgstr "Duplicate Files"
+
+msgid "Aynı içeriğe sahip kopyalar (Masaüstü, Belgeler vb.)"
+msgstr "Copies with identical content (Desktop, Documents, etc.)"
+
+msgid "Sistem Kategorileri"
+msgstr "System Categories"
+
+msgid "Kullanıcı Kategorileri"
+msgstr "User Categories"

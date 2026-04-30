@@ -215,14 +215,19 @@ class Cleaner:
                 results[cat_id] = CleanResult(cat_id, True, 0)
             return results
 
-        try:
-            result = self._run_as_root(commands)
+        full_cmd = " && ".join(commands)
 
-            # pkexec iptal durumu
+        try:
+            result = subprocess.run(
+                ["pkexec", "bash", "-c", full_cmd],
+                capture_output=True, text=True, timeout=300
+            )
+
+            # pkexec iptal durumu (126 = dismissed, 127 = not authorized)
             if result.returncode in (126, 127):
                 for cat_id in categories:
                     results[cat_id] = CleanResult(
-                        cat_id, False, 0, "Yönetici izni iptal edildi"
+                        cat_id, False, 0, _("Yönetici izni iptal edildi")
                     )
                 return results
 
@@ -247,40 +252,3 @@ class Cleaner:
                 results[cat_id] = CleanResult(cat_id, False, 0, str(e))
 
         return results
-
-    def _run_as_root(self, commands):
-        """Komutları root olarak çalıştır — helper varsa güzel mesajla, yoksa kurup çalıştır."""
-
-        if os.path.exists(HELPER_PATH) and os.path.exists(POLICY_PATH):
-            # Helper kurulu — güzel mesajla çalıştır
-            with tempfile.NamedTemporaryFile(
-                mode="w", suffix=".cmds", delete=False, prefix="pardus-clean-"
-            ) as tmp:
-                for cmd in commands:
-                    tmp.write(cmd + "\n")
-                cmds_path = tmp.name
-            os.chmod(cmds_path, 0o644)
-
-            return subprocess.run(
-                ["pkexec", HELPER_PATH, cmds_path],
-                capture_output=True, text=True, timeout=300
-            )
-
-        # Helper kurulu değil — hem kur hem temizle tek seferde
-        helper_src = os.path.join(APP_DIR, "data", "pardus-temizleyici-root")
-        policy_src = os.path.join(APP_DIR, "data", "org.pardus.temizleyici.policy")
-
-        install_cmds = []
-        if os.path.exists(helper_src):
-            install_cmds.append(f"cp '{helper_src}' '{HELPER_PATH}'")
-            install_cmds.append(f"chmod 755 '{HELPER_PATH}'")
-        if os.path.exists(policy_src):
-            install_cmds.append(f"cp '{policy_src}' '{POLICY_PATH}'")
-
-        all_cmds = install_cmds + commands
-        full_cmd = " && ".join(all_cmds)
-
-        return subprocess.run(
-            ["pkexec", "bash", "-c", full_cmd],
-            capture_output=True, text=True, timeout=300
-        )

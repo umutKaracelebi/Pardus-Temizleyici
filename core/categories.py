@@ -1,20 +1,12 @@
 """
 Pardus Sistem Temizleyici — Kategori tanımları
-
-Her kategori:
-  - id: benzersiz kimlik
-  - name: görüntülenen ad
-  - description: açıklama
-  - icon: ikon adı (GTK symbolic)
-  - risk: "low", "medium", "high"
-  - requires_root: root yetki gerekiyor mu
 """
 
 CATEGORIES = [
     {
         "id": "apt_cache",
-        "name": "APT Önbelleği",
-        "description": "İndirilen .deb paket dosyaları",
+        "name": _("APT Önbelleği"),
+        "description": _("İndirilen .deb paket dosyaları"),
         "icon": "package-x-generic-symbolic",
         "risk": "low",
         "requires_root": True,
@@ -22,8 +14,8 @@ CATEGORIES = [
     },
     {
         "id": "apt_autoremove",
-        "name": "Gereksiz Paketler",
-        "description": "Artık gerekmeyen bağımlılıklar",
+        "name": _("Gereksiz Paketler"),
+        "description": _("Artık gerekmeyen bağımlılıklar"),
         "icon": "edit-delete-symbolic",
         "risk": "medium",
         "requires_root": True,
@@ -31,8 +23,8 @@ CATEGORIES = [
     },
     {
         "id": "old_kernels",
-        "name": "Eski Çekirdekler",
-        "description": "Kullanılmayan eski kernel dosyaları",
+        "name": _("Eski Çekirdekler"),
+        "description": _("Kullanılmayan eski kernel dosyaları"),
         "icon": "application-x-firmware-symbolic",
         "risk": "medium",
         "requires_root": True,
@@ -40,8 +32,8 @@ CATEGORIES = [
     },
     {
         "id": "user_cache",
-        "name": "Kullanıcı Önbelleği",
-        "description": "Uygulama önbellek dosyaları (~/.cache)",
+        "name": _("Kullanıcı Önbelleği"),
+        "description": _("Uygulama önbellek dosyaları (~/.cache)"),
         "icon": "folder-templates-symbolic",
         "risk": "low",
         "requires_root": False,
@@ -49,8 +41,8 @@ CATEGORIES = [
     },
     {
         "id": "thumbnails",
-        "name": "Küçük Resimler",
-        "description": "Dosya yöneticisi küçük resimleri",
+        "name": _("Küçük Resimler"),
+        "description": _("Dosya yöneticisi küçük resimleri"),
         "icon": "image-x-generic-symbolic",
         "risk": "low",
         "requires_root": False,
@@ -58,65 +50,67 @@ CATEGORIES = [
     },
     {
         "id": "journal_logs",
-        "name": "Sistem Logları",
-        "description": "Eski sistem günlük kayıtları",
-        "icon": "text-x-log-symbolic",
+        "name": _("Sistem Günlükleri"),
+        "description": _("Sistem hata ve olay kayıtları"),
+        "icon": "format-text-direction-ltr-symbolic",
         "risk": "low",
         "requires_root": True,
-        "color": "#3498DB",
+        "color": "#F1C40F",
     },
     {
         "id": "trash",
-        "name": "Çöp Kutusu",
-        "description": "Silinen dosyalar",
-        "icon": "user-trash-full-symbolic",
+        "name": _("Çöp Kutusu"),
+        "description": _("Silinmiş dosyalar"),
+        "icon": "user-trash-symbolic",
         "risk": "low",
         "requires_root": False,
         "color": "#E74C3C",
     },
     {
         "id": "temp_files",
-        "name": "Geçici Dosyalar",
-        "description": "/tmp altındaki eski geçici dosyalar",
+        "name": _("Geçici Dosyalar"),
+        "description": _("/tmp altındaki kullanıcınıza ait dosyalar"),
         "icon": "document-open-recent-symbolic",
         "risk": "low",
         "requires_root": False,
-        "color": "#F39C12",
+        "color": "#95A5A6",
     },
     {
         "id": "dev_artifacts",
-        "name": "Geliştirici Artıkları",
-        "description": "Build artıkları, node_modules, __pycache__",
+        "name": _("Geliştirici Artıkları"),
+        "description": _("Projelerdeki gereksiz derleme dosyaları (node_modules, __pycache__, vb.)"),
         "icon": "utilities-terminal-symbolic",
         "risk": "medium",
         "requires_root": False,
-        "color": "#8E44AD",
+        "color": "#34495E",
     },
     {
         "id": "duplicates",
-        "name": "Yinelenen Dosyalar",
-        "description": "Birbirinin aynısı olan dosyalar",
+        "name": _("Yinelenen Dosyalar"),
+        "description": _("Aynı içeriğe sahip kopyalar (Masaüstü, Belgeler vb.)"),
         "icon": "edit-copy-symbolic",
-        "risk": "medium",
+        "risk": "low",
         "requires_root": False,
-        "color": "#E91E63",
-    },
+        "color": "#D35400",
+    }
 ]
 
+# Grup tanımları (UI görünümü için sırayı belirler)
+GROUPS = [
+    {
+        "id": "system",
+        "name": _("Sistem Kategorileri"),
+        "categories": ["apt_cache", "apt_autoremove", "old_kernels", "journal_logs"]
+    },
+    {
+        "id": "user",
+        "name": _("Kullanıcı Kategorileri"),
+        "categories": ["user_cache", "thumbnails", "trash", "temp_files", "dev_artifacts", "duplicates"]
+    }
+]
 
-def get_category(category_id):
-    """ID'ye göre kategori döndürür."""
-    for cat in CATEGORIES:
-        if cat["id"] == category_id:
-            return cat
+def get_category(cat_id):
+    for c in CATEGORIES:
+        if c["id"] == cat_id:
+            return c
     return None
-
-
-def get_safe_categories():
-    """Root gerektirmeyen kategorileri döndürür."""
-    return [c for c in CATEGORIES if not c["requires_root"]]
-
-
-def get_root_categories():
-    """Root gerektiren kategorileri döndürür."""
-    return [c for c in CATEGORIES if c["requires_root"]]

@@ -48,7 +48,31 @@ class MainWindow(Adw.ApplicationWindow):
         about_btn.add_css_class("flat")
         about_btn.set_tooltip_text("Hakkında")
         about_btn.connect("clicked", self._on_about)
+        # Dil Seçimi Menüsü
+        lang_btn = Gtk.MenuButton()
+        lang_btn.set_label("Dil / Language")
+        lang_popover = Gtk.Popover()
+        lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+        lang_box.set_margin_top(10)
+        lang_box.set_margin_bottom(10)
+        lang_box.set_margin_start(10)
+        lang_box.set_margin_end(10)
+
+        btn_tr = Gtk.Button(label="Türkçe")
+        btn_tr.add_css_class("flat")
+        btn_tr.connect("clicked", self._change_lang, "tr_TR")
+        
+        btn_en = Gtk.Button(label="English")
+        btn_en.add_css_class("flat")
+        btn_en.connect("clicked", self._change_lang, "en_US")
+
+        lang_box.append(btn_tr)
+        lang_box.append(btn_en)
+        lang_popover.set_child(lang_box)
+        lang_btn.set_popover(lang_popover)
+        
         hb.pack_end(about_btn)
+        hb.pack_end(lang_btn)
         toolbar.add_top_bar(hb)
 
         # Yatay: sidebar + içerik
@@ -84,27 +108,20 @@ class MainWindow(Adw.ApplicationWindow):
         sidebar.add_css_class("sidebar")
 
         # Logo + isim
-        brand = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-        brand.set_margin_top(20)
-        brand.set_margin_bottom(28)
-        brand.set_margin_start(18)
-        brand.set_margin_end(18)
+        brand = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        brand.set_margin_top(32)
+        brand.set_margin_bottom(24)
+        brand.set_halign(Gtk.Align.CENTER)
 
-        if os.path.exists(self._logo_path):
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                self._logo_path, 36, 36, True
-            )
-            logo = Gtk.Image.new_from_pixbuf(pixbuf)
-        else:
-            logo = Gtk.Image.new_from_icon_name("brush-symbolic")
-            logo.set_pixel_size(32)
-
+        logo = Gtk.Image.new_from_icon_name("pardus-temizleyici")
+        logo.set_pixel_size(96)
         brand.append(logo)
 
         brand_text = Gtk.Label()
         brand_text.set_markup(
-            '<span weight="bold" size="large">Temizleyici</span>'
+            f'<span weight="bold" size="large">{_("Temizleyici")}</span>'
         )
+        brand_text.set_halign(Gtk.Align.CENTER)
         brand_text.add_css_class("sidebar-brand")
         brand.append(brand_text)
         sidebar.append(brand)
@@ -116,15 +133,15 @@ class MainWindow(Adw.ApplicationWindow):
 
         self._nav_buttons = {}
         self._page_titles = {
-            "home": "Genel Bakış",
-            "scan": "Sistem Temizleyici",
-            "result": "Sonuçlar",
+            "home": _("Genel Bakış"),
+            "scan": _("Sistem Temizleyici"),
+            "result": _("Sonuçlar"),
         }
 
         for vid, icon, label in [
-            ("home", "go-home-symbolic", "Genel Bakış"),
-            ("scan", "edit-delete-symbolic", "Temizleyici"),
-            ("result", "emblem-ok-symbolic", "Sonuçlar"),
+            ("home", "go-home-symbolic", _("Genel Bakış")),
+            ("scan", "edit-delete-symbolic", _("Temizleyici")),
+            ("result", "view-list-symbolic", _("Sonuçlar")),
         ]:
             btn = Gtk.Button()
             btn.add_css_class("nav-button")
@@ -158,8 +175,10 @@ class MainWindow(Adw.ApplicationWindow):
         return sidebar
 
     def _on_nav(self, btn, vid):
-        if vid == "scan" and self._stack.get_visible_child_name() == "home":
-            self._start_scan()
+        if vid == "scan":
+            # "Temizle" sekmesine tıklandığında her zaman yeni bir tarama başlat
+            if self._stack.get_visible_child_name() != "scan":
+                self._start_scan()
             return
         self._switch_to(vid)
 
@@ -216,16 +235,16 @@ class MainWindow(Adw.ApplicationWindow):
             for r in selected.values()
         )
 
-        msg = f"Toplam {format_size(total)} alan temizlenecek.\n{len(selected)} kategori seçili.\n"
+        msg = f"{_('Toplam')} {format_size(total)} {_('alan temizlenecek.')}\n{len(selected)} {_('kategori seçili.')}\n"
         if root:
-            msg += "\n⚠️ Bazı işlemler yönetici yetkisi gerektirir."
-        msg += "\n\nBu işlem geri alınamaz."
+            msg += f"\n⚠️ {_('Bazı işlemler yönetici yetkisi gerektirir.')}"
+        msg += f"\n\n{_('Bu işlem geri alınamaz.')}"
 
         dialog = Adw.MessageDialog(
-            transient_for=self, heading="Temizleme Onayı", body=msg
+            transient_for=self, heading=_("Temizleme Onayı"), body=msg
         )
-        dialog.add_response("cancel", "İptal")
-        dialog.add_response("clean", "Temizle")
+        dialog.add_response("cancel", _("İptal"))
+        dialog.add_response("clean", _("Temizle"))
         dialog.set_response_appearance("clean", Adw.ResponseAppearance.DESTRUCTIVE)
         dialog.set_default_response("cancel")
         dialog.set_close_response("cancel")
@@ -270,12 +289,37 @@ class MainWindow(Adw.ApplicationWindow):
         dialog.present()
 
     def _on_about(self, btn):
-        Adw.AboutWindow(
+        about = Adw.AboutWindow(
             transient_for=self,
-            application_name="Pardus Sistem Temizleyici",
+            application_name=_("Pardus Sistem Temizleyici"),
             application_icon="pardus-temizleyici",
-            developer_name="Pardus Topluluk",
+            developer_name=_("İnoTürk tarafından geliştirilmiştir."),
             version="1.0.0",
-            comments="Linux sisteminizi temiz ve hızlı tutun.\nGüvenli, kural tabanlı temizleme motoru.",
-            license_type=Gtk.License.GPL_3_0,
-        ).present()
+        )
+        about.add_link(_("GitHub Reposu"), "https://github.com/umutKaracelebi/Pardus-Temizleyici")
+        about.set_comments(_("2026 Teknofest Pardus Hata Yakalama ve Öneri Yarışması Geliştirme Kategorisi için İnoTürk tarafından geliştirilmiştir.\n\nLinux sisteminizi güvenle temizleyin ve hızlandırın."))
+        about.present()
+
+    def _change_lang(self, btn, lang_code):
+        import json
+        import os
+        
+        # Popover'ı kapat
+        popover = btn.get_ancestor(Gtk.Popover)
+        if popover:
+            popover.popdown()
+
+        config_dir = os.path.expanduser("~/.config/pardus-temizleyici")
+        os.makedirs(config_dir, exist_ok=True)
+        config_path = os.path.join(config_dir, "config.json")
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump({"language": lang_code}, f)
+        
+        body_text = "Lütfen değişikliklerin uygulanması için uygulamayı yeniden başlatın." if lang_code == "tr_TR" else "Please restart the application to apply the changes."
+        dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading="Dil Değiştirildi" if lang_code == "tr_TR" else "Language Changed",
+            body=body_text
+        )
+        dialog.add_response("ok", "Tamam" if lang_code == "tr_TR" else "OK")
+        dialog.present()
