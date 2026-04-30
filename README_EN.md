@@ -1,6 +1,6 @@
 # Pardus System Cleaner 🧹
 
-Developed by the **İnoTürk Team** for the 2026 Teknofest Pardus Bug Catching and Suggestion Competition (Development Category).
+Developed by the **İnoTürk** team for the 2026 Teknofest Pardus Bug Catching and Suggestion Competition (Development Category).
 
 ## About
 Pardus System Cleaner is a modern, secure, and user-friendly Linux system cleaning tool. Unlike traditional cleaners, it uses a **rule-based, smart, and transparent** cleaning engine rather than blindly deleting system files. It securely removes unnecessary leftovers without touching any files that could disrupt the system's operation.
