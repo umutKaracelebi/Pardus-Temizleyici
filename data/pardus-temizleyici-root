@@ -1,0 +1,24 @@
+#!/bin/bash
+# Pardus Sistem Temizleyici — Root yardımcı betiği
+# Bu betik pkexec ile çağrılır ve verilen komut dosyasını çalıştırır.
+
+COMMANDS_FILE="$1"
+
+if [ -z "$COMMANDS_FILE" ] || [ ! -f "$COMMANDS_FILE" ]; then
+    echo "Hata: Komut dosyası belirtilmedi veya bulunamadı." >&2
+    exit 1
+fi
+
+# Güvenlik: sadece bilinen komutları çalıştır
+while IFS= read -r line; do
+    case "$line" in
+        apt-get\ clean*|apt-get\ -y\ autoremove*|apt-get\ -y\ purge*|journalctl\ --vacuum*)
+            eval "$line"
+            ;;
+        *)
+            echo "Bilinmeyen komut atlandı: $line" >&2
+            ;;
+    esac
+done < "$COMMANDS_FILE"
+
+rm -f "$COMMANDS_FILE"

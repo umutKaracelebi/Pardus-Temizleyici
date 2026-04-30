@@ -1,0 +1,656 @@
+/*
+ * Pardus Sistem Temizleyici — GTK4 CSS
+ * Sade, işlevsel, koyu lacivert tema
+ */
+
+/* ═══ GENEL ═══ */
+window {
+    background: #0f1729;
+}
+
+headerbar {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    min-height: 0;
+}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+    background: linear-gradient(180deg, #0c1220 0%, #111827 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-brand {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.nav-button {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 14px;
+    transition: all 200ms ease;
+    margin-bottom: 2px;
+}
+
+.nav-button:hover {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.nav-button.nav-active {
+    background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.nav-icon {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-active .nav-icon {
+    color: #ffffff;
+}
+
+.nav-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.nav-active .nav-label {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* ═══ HOME VIEW ═══ */
+.home-view {
+    background: #111827;
+}
+
+/* Disk kartı */
+.disk-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 18px 22px;
+}
+
+.disk-pct {
+    color: #ffffff;
+}
+
+.disk-pct-sub {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 12px;
+}
+
+.disk-sep {
+    background: rgba(255, 255, 255, 0.06);
+    min-width: 1px;
+}
+
+.disk-progress {
+    min-height: 8px;
+    border-radius: 4px;
+}
+
+.disk-progress > trough {
+    min-height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.disk-progress > trough > progress {
+    min-height: 8px;
+    border-radius: 4px;
+}
+
+.progress-good > trough > progress {
+    background: linear-gradient(90deg, #059669, #10B981);
+}
+
+.progress-warn > trough > progress {
+    background: linear-gradient(90deg, #D97706, #F59E0B);
+}
+
+.progress-danger > trough > progress {
+    background: linear-gradient(90deg, #DC2626, #EF4444);
+}
+
+.disk-detail {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.disk-total {
+    font-size: 11px;
+}
+
+/* Bölüm başlığı */
+.section-title {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.est-status {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+.est-done {
+    color: #10B981;
+    font-style: normal;
+}
+
+/* Kategori satırları */
+.cat-row {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 200ms ease;
+}
+
+.cat-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(37, 99, 235, 0.1);
+}
+
+.cat-icon-box {
+    background: rgba(37, 99, 235, 0.08);
+    border-radius: 8px;
+    padding: 7px;
+}
+
+.cat-icon {
+    color: #3B82F6;
+}
+
+.cat-name {
+    font-weight: 600;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.cat-desc {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.cat-size {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.cat-size-found {
+    color: #3B82F6;
+}
+
+.cat-size-clean {
+    color: #10B981;
+    font-size: 11px;
+}
+
+/* Kart görünümü */
+.cat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: all 200ms ease;
+}
+
+.cat-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(37, 99, 235, 0.12);
+}
+
+.cat-card-size {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3B82F6;
+    margin-top: 4px;
+}
+
+/* Görünüm değiştirme */
+.view-toggle {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-width: 32px;
+    min-height: 28px;
+    color: rgba(255, 255, 255, 0.3);
+    transition: all 150ms ease;
+}
+
+.view-btn:hover {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.view-btn-active {
+    background: rgba(37, 99, 235, 0.15);
+    color: #3B82F6;
+}
+
+/* Geçmiş satırı ek stiller */
+.history-row-cat {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    min-width: 70px;
+}
+
+/* ═══ BUTONLAR ═══ */
+.analyze-button {
+    background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 32px;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35);
+    transition: all 250ms ease;
+}
+
+.analyze-button:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%);
+    box-shadow: 0 6px 28px rgba(37, 99, 235, 0.45);
+    transform: translateY(-1px);
+}
+
+.analyze-button:active {
+    transform: translateY(0);
+}
+
+.action-btn-label {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 200ms ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.select-all-button {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.select-all-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.clean-button {
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 28px;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 18px rgba(220, 38, 38, 0.25);
+    transition: all 250ms ease;
+}
+
+.clean-button:hover {
+    background: linear-gradient(135deg, #B91C1C 0%, #DC2626 100%);
+    box-shadow: 0 6px 24px rgba(220, 38, 38, 0.35);
+    transform: translateY(-1px);
+}
+
+.clean-btn-label {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.home-button {
+    background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+    transition: all 250ms ease;
+}
+
+.home-button:hover {
+    box-shadow: 0 6px 24px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+/* ═══ SCAN VIEW ═══ */
+.scan-view {
+    background: #111827;
+}
+
+.scan-status {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.scan-progress-bar {
+    min-height: 6px;
+    border-radius: 3px;
+}
+
+.scan-progress-bar > trough {
+    min-height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.scan-progress-bar > trough > progress {
+    min-height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #2563EB, #3B82F6);
+}
+
+.scan-total {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.scan-count {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 13px;
+}
+
+.scan-row {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 200ms ease;
+}
+
+.scan-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(37, 99, 235, 0.12);
+}
+
+.scan-row-icon {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.scan-row-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.scan-row-details {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.scan-row-size {
+    font-weight: 700;
+    font-size: 14px;
+    color: #3B82F6;
+    min-width: 70px;
+}
+
+.size-deselected {
+    color: rgba(255, 255, 255, 0.2);
+    text-decoration: line-through;
+}
+
+.size-partial {
+    color: #F59E0B;
+}
+
+.expand-btn {
+    color: rgba(255, 255, 255, 0.3);
+    min-width: 28px;
+    min-height: 28px;
+}
+
+.scan-detail-box {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 6px;
+}
+
+.file-item-name {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: monospace;
+}
+
+.file-item-size {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.2);
+    font-family: monospace;
+    min-width: 55px;
+}
+
+.file-item-more {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.18);
+    font-style: italic;
+}
+
+.file-count-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.5px;
+}
+
+/* Yinelenen dosya grupları */
+.dup-group {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.dup-group-icon {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.dup-group-name {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.dup-path-keep {
+    font-size: 11px;
+    color: #10B981;
+    font-family: monospace;
+}
+
+.dup-path-delete {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: monospace;
+}
+
+.dup-tag-keep {
+    font-size: 9px;
+    font-weight: 700;
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    letter-spacing: 0.5px;
+}
+
+.dup-tag-delete {
+    font-size: 9px;
+    font-weight: 700;
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    letter-spacing: 0.5px;
+}
+
+.empty-results {
+    color: rgba(255, 255, 255, 0.4);
+    padding: 40px 0;
+}
+
+/* ═══ RESULT VIEW ═══ */
+.result-view {
+    background: #111827;
+}
+
+.result-title {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    padding: 20px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    min-width: 200px;
+}
+
+.result-card-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 1px;
+}
+
+.freed-size {
+    margin-top: 4px;
+}
+
+.result-details {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    min-width: 380px;
+}
+
+.detail-name {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.detail-size {
+    font-size: 13px;
+    color: #10B981;
+    font-weight: 600;
+}
+
+.detail-error {
+    font-size: 12px;
+    color: #EF4444;
+}
+
+/* ═══ CHECKBOX ═══ */
+checkbutton check {
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    min-width: 18px;
+    min-height: 18px;
+}
+
+checkbutton check:checked {
+    background: linear-gradient(135deg, #2563EB, #3B82F6);
+    border-color: #3B82F6;
+}
+
+checkbutton check:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+}
+
+/* ═══ SCROLLBAR ═══ */
+scrollbar slider {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    min-width: 5px;
+}
+
+scrollbar slider:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* FlowBox */
+flowboxchild {
+    background: transparent;
+    border: none;
+    padding: 0;
+    outline: none;
+}
+
+/* ═══ RESULT — GEÇMİŞ İSTATİSTİKLERİ ═══ */
+.stat-mini-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.stat-mini-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.5px;
+}
+
+.stat-mini-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.history-row {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 3px;
+}
+
+.history-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.history-row-icon {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.history-row-name {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+}
+
+.history-row-size {
+    font-size: 13px;
+    color: #10B981;
+    font-weight: 600;
+}
+
+.result-sep {
+    background: rgba(255, 255, 255, 0.06);
+    min-height: 1px;
+}
