@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>com.pardus.temizleyici</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Pardus Sistem Temizleyici</name>
+  <summary>Modern ve güvenli sistem temizleme aracı</summary>
+  <description>
+    <p>Pardus Sistem Temizleyici, gereksiz dosyaları ve önbellekleri temizleyerek sisteminizde yer açmanızı sağlayan modern ve güvenli bir araçtır.</p>
+  </description>
+  <launchable type="desktop-id">pardus-temizleyici.desktop</launchable>
+  <url type="homepage">https://inoturk.netlify.app/</url>
+  <developer id="com.pardus.temizleyici">
+    <name>İnoTürk</name>
+  </developer>
+  <update_contact>inoturkteknolojitakimi@gmail.com</update_contact>
+</component>

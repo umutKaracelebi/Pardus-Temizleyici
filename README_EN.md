@@ -33,4 +33,4 @@ python3 main.py
 Pardus System Cleaner is highly secure against command injection. Personal user files are safely deleted using Python's native `os` and `shutil` libraries. System tasks (apt-get, journalctl) are isolated and managed securely in the background.
 
 ## License
-This project is open-source and protected under the MIT license. You are free to use, modify, and distribute it.
+This project is open-source and protected under the GPL-3.0 license. You are free to use, modify, and distribute it.

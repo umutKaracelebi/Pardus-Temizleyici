@@ -31,6 +31,7 @@ class Application(Adw.Application):
         app_dir = os.path.dirname(os.path.abspath(__file__))
         icon_theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default())
         icon_theme.add_search_path(app_dir)
+        Gtk.Window.set_default_icon_name("pardus-temizleyici")
 
         # Koyu tema varsayılan
         style_manager = Adw.StyleManager.get_default()
