@@ -17,14 +17,19 @@ Pardus System Cleaner is a modern, secure, and user-friendly Linux system cleani
 
 ## Installation & Execution
 
-### Dependencies
-- Python 3.x
-- `python3-gi` (PyGObject)
-- `gir1.2-gtk-4.0` and `gir1.2-adw-1` (GTK4 and Libadwaita libraries)
-- `pkexec` (PolicyKit - For tasks requiring administrative privileges)
+### .deb Package Installation (Recommended)
+To fully integrate the application into your system (app menu, icons, etc.), download the latest `.deb` package from the GitHub Releases section and install it via terminal:
+```bash
+sudo dpkg -i pardus-temizleyici_1.0.0_all.deb
+sudo apt install -f  # (To automatically install any missing dependencies)
+```
+After installation, you can launch the application by clicking its icon in the Pardus Applications menu or by typing `pardus-temizleyici` in the terminal.
 
-### Running the App
-To run the application, simply open a terminal, navigate to the project directory, and execute:
+### Running from Source Code (For Developers)
+If you want to test the application directly from the source code, ensure the following system packages are installed:
+- Python 3.x, `python3-gi`, `gir1.2-gtk-4.0`, `gir1.2-adw-1`, `pkexec`
+
+Then navigate to the project directory in your terminal and execute:
 ```bash
 python3 main.py
 ```

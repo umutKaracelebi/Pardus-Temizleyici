@@ -17,14 +17,19 @@ Pardus Sistem Temizleyici, modern, güvenli ve kullanıcı dostu bir Linux siste
 
 ## Kurulum ve Çalıştırma
 
-### Gereksinimler
-- Python 3.x
-- `python3-gi` (PyGObject)
-- `gir1.2-gtk-4.0` ve `gir1.2-adw-1` (GTK4 ve Libadwaita kütüphaneleri)
-- `pkexec` (PolicyKit - Yönetici yetkisi gerektiren temizlikler için)
+### .deb Paketi İle Kurulum (Önerilen)
+Uygulamayı sisteminize tam entegre (uygulama menüsü, simgeler vb.) olarak kurmak için GitHub Releases bölümünden güncel `.deb` paketini indirin ve terminalden şu komutla kurun:
+```bash
+sudo dpkg -i pardus-temizleyici_1.0.0_all.deb
+sudo apt install -f  # (Eksik bağımlılıkları otomatik kurmak için)
+```
+Kurulum bittikten sonra uygulamayı Pardus Uygulamalar menüsünden simgesine tıklayarak başlatabilir veya terminale `pardus-temizleyici` yazabilirsiniz.
 
-### Çalıştırma
-Uygulamayı çalıştırmak için terminalden projenin bulunduğu dizine girip şu komutu vermeniz yeterlidir:
+### Kaynak Koddan Çalıştırma (Geliştiriciler İçin)
+Uygulamayı doğrudan kodlar üzerinden test etmek isterseniz şu sistem paketlerinin kurulu olduğundan emin olun:
+- Python 3.x, `python3-gi`, `gir1.2-gtk-4.0`, `gir1.2-adw-1`, `pkexec`
+
+Ardından terminalden proje dizinine girip çalıştırın:
 ```bash
 python3 main.py
 ```
